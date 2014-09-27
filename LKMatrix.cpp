@@ -1,6 +1,8 @@
 #include "LKMatrix.h"
 #include <vector>
 #include <cmath>
+#include <iostream>
+#include <cassert>
 
 using namespace std;
 
@@ -9,7 +11,7 @@ LKMatrix::LKMatrix(vector<pair<double, double> > &coords, vector<int> &ids) {
   this->ids = ids;
   size = ids.size();
 
-  vector<vector<int> > edgeFlags(size, vector<int> (size, OUT_TOUR));
+  edgeFlags = vector<vector<int> > (size, vector<int> (size, OUT_TOUR));
 
   // set the current tour
 
