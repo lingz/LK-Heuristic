@@ -1,4 +1,3 @@
-
 #include "LKMatrix.h"
 #include <vector>
 #include <cmath>
