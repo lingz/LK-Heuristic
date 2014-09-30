@@ -17,8 +17,10 @@ int main(){
 
   LKMatrix mat(coord, id);
 
-  vector<int> tour = mat.getCurrentTour();
-  for(int i=0; i<tour.size(); i++){
-    cout<<tour[i]<<endl;
-  }
+  double distance = mat.getCurrentTourDistance();
+  cout << distance << endl;
+
+  mat.optimizeTour();
+  distance = mat.getCurrentTourDistance();
+  cout << distance << endl;
 }

@@ -13,13 +13,17 @@ class LKMatrix {
     LKMatrix(vector<pair<double, double> > &coords, vector<int> &ids);
     vector<int> getCurrentTour();
     double getCurrentTourDistance();
+    void optimizeTour();
 
   private:
+    vector<int> tour;
     vector<vector<int> > edgeFlags;
     vector<pair<double, double> > coords;
     vector<int> ids;
     void joinLocations(int i, int j);
     vector<vector<double> > edgeDistances;
+    void LKMove();
+    void reverse(int start, int end);
 };
 
 #endif
