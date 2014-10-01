@@ -3,14 +3,18 @@
 #include <cmath>
 #include <set>
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
-// overwrite pair equality to equate reversed edges
-bool operator==(pair<int, int> x, pair<int, int> y) {
-  return (x.first == y.first && x.second == y.second) ||
-    (x.second == y.first && x.first == y.second);
+pair<int, int> make_sorted_pair(int x, int y) {
+  if (x < y) {
+    return make_pair(x, y);
+  } else {
+    return make_pair(y, x);
+  }
 }
+
 
 LKMatrix::LKMatrix(vector<pair<double, double> > &coords, vector<int> &ids) {
   this->coords = coords;
@@ -47,8 +51,10 @@ double LKMatrix::getCurrentTourDistance() {
   int currentIndex = 0;
   double distance = 0;
   for (int i = 0; i < size; i++) {
+    cout << edgeDistances[i][tour[i]] << "; ";
     distance += edgeDistances[i][tour[i]];
   }
+  cout << endl;
 
   return distance;
 }
@@ -59,56 +65,66 @@ void LKMatrix::LKMove() {
   double g_opt = 0;
   double g = 0; // := G_i
   double g_local; // := g_i
-  int fromV = 0;
+  int lastNextV = 0;
+  int fromV;
   int nextV;
-  int newNextV;
+  int nextFromV;
+  int lastPossibleNextV;
   pair<int, int> broken_edge;
   double y_opt_length;
   double broken_edge_length;
   double g_opt_local;
 
+  fromV = tour[lastNextV];
 
   do {
     // default, no nextV is found
     nextV = -1;
-    broken_edge = make_pair(fromV, tour[fromV]); // := x_i
 
-    cout << fromV << endl;
+    cout << "Breaking " << lastNextV << " " << fromV << endl;
+    cout << "Testing from " << fromV << endl;;
+
+    broken_edge = make_sorted_pair(lastNextV, fromV); // := x_i
+    broken_edge_length = edgeDistances[broken_edge.first][broken_edge.second];
 
     // Condition 4(c)(1)
     if (joined_set.count(broken_edge) > 0) break;
 
     // y_i := (fromV, nextV)
-    for (int possibleNextV = 0; possibleNextV < size ; possibleNextV++) {
-      cout << "Testing " << possibleNextV << endl;
-      //cout << (broken_set.count(make_pair(fromV, possibleNextV)) == 0) << endl; 
+    for (int possibleNextV = tour[fromV]; nextV == -1 && possibleNextV != 0; possibleNextV = tour[possibleNextV]) {
+      //cout << "Testing " << possibleNextV << endl;
+      //cout << (broken_set.count(make_sorted_pair(fromV, possibleNextV)) == 0) << endl; 
       //cout << (possibleNextV != fromV) << endl; 
       //cout << (g + g_local > 0) << endl; 
-      //cout << (joined_set.count(make_pair(possibleNextV, tour[possibleNextV])) == 0) << endl; 
+      //cout << (joined_set.count(make_sorted_pair(possibleNextV, tour[possibleNextV])) == 0) << endl; 
 
-      broken_edge_length = edgeDistances[broken_edge.first][broken_edge.second];
 
       // calculate local gain
       g_local = broken_edge_length - edgeDistances[fromV][possibleNextV];
 
+      //cout << "Distances" << endl;
       //cout << broken_edge_length << endl;
       //cout << g_local << endl;
 
       // conditions that make this edge not a valid y_i
       if (!(
         // condition 4(c)(2)
-        broken_set.count(make_pair(fromV, possibleNextV)) == 0 &&
-        // cannot join with self
-        possibleNextV != fromV &&
+        broken_set.count(make_sorted_pair(fromV, possibleNextV)) == 0 &&
         // condition 4(d)
         g + g_local > 0 &&
         // condition 4(e)
-        joined_set.count(make_pair(possibleNextV, tour[possibleNextV])) == 0
-      )) continue;
+        // x_{i+1} has never been joined before
+        joined_set.count(make_sorted_pair(lastPossibleNextV, possibleNextV)) == 0 &&
+        tour[possibleNextV] != 0 && // not already joined to start
+        possibleNextV != tour[fromV] // not the one already joined to fromV
+      )) {
+        lastPossibleNextV = possibleNextV;
+        continue;
+      }
 
       // If we are here, then y_i := (fromV, possibleNextV)
       nextV = possibleNextV;
-      break;
+      cout << "Moving to " << nextV << endl;
     }
 
     // a next y_i exists
@@ -116,7 +132,7 @@ void LKMatrix::LKMove() {
 
       // add to our broken_set and joined_set
       broken_set.insert(broken_edge);
-      joined_set.insert(make_pair(fromV, nextV));
+      joined_set.insert(make_sorted_pair(fromV, nextV));
 
       // condition 4(f)
       y_opt_length = edgeDistances[tour[fromV]][0]; // y_i_opt
@@ -124,6 +140,7 @@ void LKMatrix::LKMove() {
       // The tour length if we exchanged the broken edge (x_i)
       // with y_opt, (t_{2i}, t_0)
       g_opt_local = g + (broken_edge_length - y_opt_length);
+
       if (g_opt_local > g_opt) {
         g_opt = g_opt_local;
         tour_opt = tour;
@@ -132,24 +149,31 @@ void LKMatrix::LKMove() {
       // recalculate g
       g += broken_edge_length - edgeDistances[fromV][nextV];
 
-      // remember our new t_{2i+1}
-      newNextV = tour[nextV];
-
       // reverse tour direction between newNextV and fromV
-      reverse(newNextV, fromV);
+      reverse(fromV, lastPossibleNextV);
+
+      // remember our new t_{2i+1}
+      nextFromV = lastPossibleNextV;
+      cout << "Joined to " << nextFromV << endl;
 
       // build y_i
-      tour[nextV] = fromV;
+      tour[fromV] = nextV;
       
-      // set new fromV (t_{2i+1})
-      fromV = newNextV;
+      // set new fromV to t_{2i+1}
+      // and out lastNextV to t_{2i}
+      lastNextV = nextV;
+      fromV = nextFromV;
+
     }
 
   } while (nextV != -1);
 
 
+  // join up
+  tour[0] = fromV;
   cout << "terminated" << endl;
-
+  printTour();
+  assert(isTour());
 
 }
 
@@ -178,5 +202,23 @@ void LKMatrix::reverse(int start, int end) {
   } while (current != end); // terminate once we've reversed up to end
 }
 
+// Sanity check function
+bool LKMatrix::isTour() {
+  int count = 1;
+  int start = tour[0];
+  while (start != 0) {
+    start = tour[start];
+    count++;
+  }
+  return (count == size);
+}
 
 
+void LKMatrix::printTour() {
+  int current = 0;
+  do {
+    cout << current << " ; ";
+    current = tour[current];
+  } while (current != 0);
+  cout << endl;
+}

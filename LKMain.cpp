@@ -21,6 +21,7 @@ int main(){
   cout << distance << endl;
 
   mat.optimizeTour();
+
   distance = mat.getCurrentTourDistance();
   cout << distance << endl;
 }

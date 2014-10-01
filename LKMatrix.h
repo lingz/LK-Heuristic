@@ -14,6 +14,8 @@ class LKMatrix {
     vector<int> getCurrentTour();
     double getCurrentTourDistance();
     void optimizeTour();
+    bool isTour();
+    void printTour();
 
   private:
     vector<int> tour;
