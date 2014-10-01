@@ -14,8 +14,9 @@ class LKMatrix {
     vector<int> getCurrentTour();
     double getCurrentTourDistance();
     void optimizeTour();
-    bool isTour();
     void printTour();
+    void printTourIds();
+
 
   private:
     vector<int> tour;
@@ -26,6 +27,7 @@ class LKMatrix {
     vector<vector<double> > edgeDistances;
     void LKMove(int tourStart);
     void reverse(int start, int end);
+    bool isTour();
 };
 
 #endif

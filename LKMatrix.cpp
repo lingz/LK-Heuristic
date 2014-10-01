@@ -53,10 +53,10 @@ double LKMatrix::getCurrentTourDistance() {
   int currentIndex = 0;
   double distance = 0;
   for (int i = 0; i < size; i++) {
-    cout << edgeDistances[i][tour[i]] << "; ";
+    //cout << edgeDistances[i][tour[i]] << "; ";
     distance += edgeDistances[i][tour[i]];
   }
-  cout << endl;
+  //cout << endl;
 
   return distance;
 }
@@ -83,8 +83,8 @@ void LKMatrix::LKMove(int tourStart) {
     // default, no nextV is found
     nextV = -1;
 
-    cout << "Breaking " << lastNextV << " " << fromV << endl;
-    cout << "Testing from " << fromV << endl;;
+    //cout << "Breaking " << lastNextV << " " << fromV << endl;
+    //cout << "Testing from " << fromV << endl;;
 
     broken_edge = make_sorted_pair(lastNextV, fromV); // := x_i
     broken_edge_length = edgeDistances[broken_edge.first][broken_edge.second];
@@ -126,7 +126,7 @@ void LKMatrix::LKMove(int tourStart) {
 
       // If we are here, then y_i := (fromV, possibleNextV)
       nextV = possibleNextV;
-      cout << "Moving to " << nextV << endl;
+      //cout << "Moving to " << nextV << endl;
     }
 
     // a next y_i exists
@@ -158,7 +158,7 @@ void LKMatrix::LKMove(int tourStart) {
 
       // remember our new t_{2i+1}
       nextFromV = lastPossibleNextV;
-      cout << "Joined to " << nextFromV << endl;
+      //cout << "Joined to " << nextFromV << endl;
 
       // build y_i
       tour[fromV] = nextV;
@@ -174,7 +174,7 @@ void LKMatrix::LKMove(int tourStart) {
 
 
   // join up
-  cout << "terminated" << endl;
+  //cout << "terminated" << endl;
   tour = tour_opt;
   printTour();
   assert(isTour());
@@ -223,8 +223,16 @@ bool LKMatrix::isTour() {
 void LKMatrix::printTour() {
   int current = 0;
   do {
-    cout << current << " ; ";
+    //cout << current << " ; ";
     current = tour[current];
   } while (current != 0);
-  cout << endl;
+  //cout << endl;
+}
+
+void LKMatrix::printTourIds() {
+  int current = 0;
+  do {
+    cout << ids[current] << endl;
+    current = tour[current];
+  } while (current != 0);
 }
