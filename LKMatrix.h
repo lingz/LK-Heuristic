@@ -1,8 +1,6 @@
 #ifndef LK_MATRIX
 #define LK_MATRIX
 
-
-#include "LK_constants.h"
 #include <vector>
 
 using namespace std;

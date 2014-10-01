@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./a.out < $1 > $2
+./LKSolver < $1 > $2

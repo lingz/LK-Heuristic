@@ -12,7 +12,7 @@ Team: Codebreakers
 ## Step 1
 Compile Code
 ```
-g++ LKMain.cpp LKMatrix.cpp
+g++ LKMain.cpp LKMatrix.cpp -o LKSolver
 ```
 
 ## Step 2

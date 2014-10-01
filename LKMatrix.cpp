@@ -23,8 +23,6 @@ LKMatrix::LKMatrix(vector<pair<double, double> > &coords, vector<int> &ids) {
   this->ids = ids;
   size = ids.size();
 
-  edgeFlags = vector<vector<int> > (size, vector<int> (size, OUT_TOUR));
-
   // initialize tour
   tour = vector<int>(size, 0);
 
