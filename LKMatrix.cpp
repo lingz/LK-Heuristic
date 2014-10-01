@@ -4,6 +4,8 @@
 #include <set>
 #include <iostream>
 #include <cassert>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -59,13 +61,13 @@ double LKMatrix::getCurrentTourDistance() {
   return distance;
 }
 
-void LKMatrix::LKMove() {
+void LKMatrix::LKMove(int tourStart) {
   set<pair<int,int> > broken_set, joined_set;
-  vector<int> tour_opt;
+  vector<int> tour_opt = tour;
   double g_opt = 0;
   double g = 0; // := G_i
   double g_local; // := g_i
-  int lastNextV = 0;
+  int lastNextV = tourStart;
   int fromV;
   int nextV;
   int nextFromV;
@@ -91,7 +93,7 @@ void LKMatrix::LKMove() {
     if (joined_set.count(broken_edge) > 0) break;
 
     // y_i := (fromV, nextV)
-    for (int possibleNextV = tour[fromV]; nextV == -1 && possibleNextV != 0; possibleNextV = tour[possibleNextV]) {
+    for (int possibleNextV = tour[fromV]; nextV == -1 && possibleNextV != tourStart; possibleNextV = tour[possibleNextV]) {
       //cout << "Testing " << possibleNextV << endl;
       //cout << (broken_set.count(make_sorted_pair(fromV, possibleNextV)) == 0) << endl; 
       //cout << (possibleNextV != fromV) << endl; 
@@ -135,7 +137,7 @@ void LKMatrix::LKMove() {
       joined_set.insert(make_sorted_pair(fromV, nextV));
 
       // condition 4(f)
-      y_opt_length = edgeDistances[tour[fromV]][0]; // y_i_opt
+      y_opt_length = edgeDistances[tour[fromV]][tourStart]; // y_i_opt
       
       // The tour length if we exchanged the broken edge (x_i)
       // with y_opt, (t_{2i}, t_0)
@@ -144,6 +146,8 @@ void LKMatrix::LKMove() {
       if (g_opt_local > g_opt) {
         g_opt = g_opt_local;
         tour_opt = tour;
+        // join the optimal tour
+        tour_opt[tourStart] = fromV;
       }
 
       // recalculate g
@@ -170,15 +174,17 @@ void LKMatrix::LKMove() {
 
 
   // join up
-  tour[0] = fromV;
   cout << "terminated" << endl;
+  tour = tour_opt;
   printTour();
   assert(isTour());
 
 }
 
 void LKMatrix::optimizeTour() {
-  LKMove();
+  for (int i = 0; i < size; i++) {
+    LKMove(i);
+  }
 }
 
 /*

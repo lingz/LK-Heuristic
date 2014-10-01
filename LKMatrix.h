@@ -24,7 +24,7 @@ class LKMatrix {
     vector<int> ids;
     void joinLocations(int i, int j);
     vector<vector<double> > edgeDistances;
-    void LKMove();
+    void LKMove(int tourStart);
     void reverse(int start, int end);
 };
 
