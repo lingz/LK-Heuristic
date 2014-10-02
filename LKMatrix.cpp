@@ -214,7 +214,7 @@ void LKMatrix::optimizeTour() {
     if (j != 0) {
       assert(diff >= 0);
       if (diff == 0) {
-        cout << "Converged after " << j << " iterations" << endl;
+        //cout << "Converged after " << j << " iterations" << endl;
         break;
       }
     };
