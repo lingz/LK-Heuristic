@@ -79,16 +79,19 @@ void LKMatrix::LKMove(int tourStart) {
   double g_opt_local;
 
   fromV = tour[lastNextV];
+  long initialTourDistance = getCurrentTourDistance();
 
   do {
     // default, no nextV is found
     nextV = -1;
 
-    //cout << "Breaking " << lastNextV << " " << fromV << endl;
-    //cout << "Testing from " << fromV << endl;;
 
     broken_edge = make_sorted_pair(lastNextV, fromV); // := x_i
     broken_edge_length = edgeDistances[broken_edge.first][broken_edge.second];
+
+    //cout << "Breaking " << lastNextV << " " << fromV << endl;
+    //cout << "Testing from " << fromV << endl;;
+    //cout << "Breaking of length: " << broken_edge_length << endl;
 
     // Condition 4(c)(1)
     if (joined_set.count(broken_edge) > 0) break;
@@ -104,10 +107,6 @@ void LKMatrix::LKMove(int tourStart) {
 
       // calculate local gain
       g_local = broken_edge_length - edgeDistances[fromV][possibleNextV];
-
-      //cout << "Distances" << endl;
-      //cout << broken_edge_length << endl;
-      //cout << g_local << endl;
 
       // conditions that make this edge not a valid y_i
       if (!(
@@ -145,16 +144,31 @@ void LKMatrix::LKMove(int tourStart) {
       g_opt_local = g + (broken_edge_length - y_opt_length);
 
       if (g_opt_local > g_opt) {
+        //vector<int> temp_tour = tour;
+        //temp_tour[tourStart] = fromV;
+        //tour = tour_opt;
+        //printTour();
+        //long old_distance = getCurrentTourDistance();
+        //tour = temp_tour;
+        //printTour();
+        //long new_distance = getCurrentTourDistance();
+        //cout << "(Temp) Joining of distance: " << y_opt_length << endl;
+        //cout << "Old distance: " << old_distance << endl;
+        //cout << "New distance: " << new_distance << endl;
+        //assert(new_distance <= old_distance);
         g_opt = g_opt_local;
         tour_opt = tour;
         // join the optimal tour
         tour_opt[tourStart] = fromV;
       }
 
+      //cout << "Joining of distance: " << edgeDistances[fromV][nextV] << endl;
+
       // recalculate g
       g += broken_edge_length - edgeDistances[fromV][nextV];
 
       // reverse tour direction between newNextV and fromV
+      // implicitly breaks x_i
       reverse(fromV, lastPossibleNextV);
 
       // remember our new t_{2i+1}
@@ -176,17 +190,12 @@ void LKMatrix::LKMove(int tourStart) {
 
   // join up
   //cout << "terminated" << endl;
-  long distanceBefore = getCurrentTourDistance();
   tour = tour_opt;
   long distanceAfter = getCurrentTourDistance();
-
+  assert(distanceAfter <= initialTourDistance);
 
   printTour();
   assert(isTour());
-  if (distanceAfter > distanceBefore) {
-    cout << "Distance before: " << distanceBefore << endl;
-    cout << "Distance after: " << distanceAfter << endl;
-  }
 
 }
 
@@ -195,23 +204,21 @@ void LKMatrix::optimizeTour() {
   int diff;
   int old_distance = 0;
   int new_distance = 0;
-  // we also need to keep timers on our code so it doesn't exceed 2 mins
-  struct timeval start, end;
-  long mtime, seconds, useconds;    
 
   for (int j = 0; j < 100; j++) {
-    gettimeofday(&start, NULL);
     for (int i = 0; i < size; i++) {
       LKMove(i);
     }
-    gettimeofday(&end, NULL);
-    seconds  = end.tv_sec  - start.tv_sec;
-    useconds = end.tv_usec - start.tv_usec;
-    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
-    cout << "Time is: " << mtime << endl;
     new_distance = getCurrentTourDistance();
     diff = old_distance - new_distance;
-    cout << "Distance Delta is: " << diff << endl;
+    if (j != 0) {
+      assert(diff >= 0);
+      if (diff == 0) {
+        cout << "Converged after " << j << " iterations" << endl;
+        break;
+      }
+    };
+    old_distance = new_distance;
   }
 }
 

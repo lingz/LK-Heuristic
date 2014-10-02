@@ -19,5 +19,6 @@ int main(){
 
   mat.optimizeTour();
 
-  //mat.printTourIds();
+  //cout << mat.getCurrentTourDistance() << endl;
+  mat.printTourIds();
 }
