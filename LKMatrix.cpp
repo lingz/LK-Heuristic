@@ -6,6 +6,9 @@
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
+#include <sys/time.h>
+#include <stdio.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -135,7 +138,7 @@ void LKMatrix::LKMove(int tourStart) {
       joined_set.insert(make_sorted_pair(fromV, nextV));
 
       // condition 4(f)
-      y_opt_length = edgeDistances[tour[fromV]][tourStart]; // y_i_opt
+      y_opt_length = edgeDistances[fromV][tourStart]; // y_i_opt
       
       // The tour length if we exchanged the broken edge (x_i)
       // with y_opt, (t_{2i}, t_0)
@@ -173,15 +176,42 @@ void LKMatrix::LKMove(int tourStart) {
 
   // join up
   //cout << "terminated" << endl;
+  long distanceBefore = getCurrentTourDistance();
   tour = tour_opt;
+  long distanceAfter = getCurrentTourDistance();
+
+
   printTour();
   assert(isTour());
+  if (distanceAfter > distanceBefore) {
+    cout << "Distance before: " << distanceBefore << endl;
+    cout << "Distance after: " << distanceAfter << endl;
+  }
 
 }
 
 void LKMatrix::optimizeTour() {
-  for (int i = 0; i < size; i++) {
-    LKMove(i);
+  // we need to test for convergence and also the difference from last time
+  int diff;
+  int old_distance = 0;
+  int new_distance = 0;
+  // we also need to keep timers on our code so it doesn't exceed 2 mins
+  struct timeval start, end;
+  long mtime, seconds, useconds;    
+
+  for (int j = 0; j < 100; j++) {
+    gettimeofday(&start, NULL);
+    for (int i = 0; i < size; i++) {
+      LKMove(i);
+    }
+    gettimeofday(&end, NULL);
+    seconds  = end.tv_sec  - start.tv_sec;
+    useconds = end.tv_usec - start.tv_usec;
+    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    cout << "Time is: " << mtime << endl;
+    new_distance = getCurrentTourDistance();
+    diff = old_distance - new_distance;
+    cout << "Distance Delta is: " << diff << endl;
   }
 }
 

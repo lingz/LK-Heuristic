@@ -19,5 +19,5 @@ int main(){
 
   mat.optimizeTour();
 
-  mat.printTourIds();
+  //mat.printTourIds();
 }
