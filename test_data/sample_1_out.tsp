@@ -1,100 +1,100 @@
-Time is: 25
-Time is: 3
-Time is: 2
-Time is: 2
-Time is: 1
-Time is: 2
-Time is: 2
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
-Time is: 1
+10462
+9481
+10084
+10531
+9737
+10104
+10643
+9512
+9568
+9561
+11333
+11453
+9517
+10902
+12595
+10463
+80782
+80951
+80061
+80280
+80989
+80852
+81026
+12592
+10099
+12591
+10153
+10458
+11425
+80842
+11624
+11530
+12675
+9726
+9523
+9411
+11274
+10459
+9759
+10966
+10461
+8651
+8770
+10940
+12425
+12424
+9566
+11433
+10460
+10903
+80903
+80960
+80758
+80775
+80861
+80765
+80899
+80893
+80425
+80835
+81253
+80928
+80822
+80732
+80855
+80877
+80943
+80800
+80992
+80987
+81178
+80277
+80689
+80560
+81175
+80322
+81196
+80532
+80678
+80274
+80366
+80682
+81187
+80420
+81244
+80302
+81057
+80686
+80690
+81188
+80101
+81036
+80227
+80413
+80937
+80761
+80418
+8808
+10794
+13229
